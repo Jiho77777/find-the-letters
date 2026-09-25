@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-type Mode = 'country' | 'food' | 'animal'
+type Mode = 'country' | 'food' | 'animal' | 'fruit'
 type Difficulty = 'normal' | 'hard'
 type Theme = 'default' | 'sunset' | 'galaxy' | 'forest' | 'sakura' | 'royal' | 'aqua'
 type Round = { name: string; hint: string }
@@ -12,6 +12,9 @@ const rawRounds = {
     ['대한민국', '아시아에 위치하며 K-컬처의 중심인 나라'], ['미국', '자유의 여신상과 뉴욕이 있는 북아메리카 대국'], ['프랑스', '에펠탑과 루브르 박물관이 있는 예술의 나라'], ['일본', '스시와 온천, 벚꽃으로 유명한 이웃 나라'], ['영국', '빅벤과 타워브리지가 있는 신사의 나라'], ['이탈리아', '장화 모양 지형과 피자, 파스타의 고향'], ['캐나다', '메이플 시럽과 넓은 자연경관을 가진 북쪽 나라'], ['호주', '캥거루와 코알라가 사는 나라'], ['독일', '소시지와 맥주, 자동차 산업으로 유명한 국가'], ['스위스', '알프스 산맥과 아름다운 호수가 있는 국가'], ['브라질', '축구와 거대한 예수상이 있는 남미 국가'], ['스페인', '열정의 플라멩코와 투우의 나라'], ['이집트', '피라미드와 스핑크스가 있는 고대 문명의 나라'], ['베트남', '쌀국수와 하롱베이로 유명한 국가'], ['태국', '황금 사원과 길거리 음식이 가득한 나라'], ['멕시코', '타코와 마야 문명의 유적이 있는 국가'], ['그리스', '산토리니와 신화의 고향'], ['노르웨이', '피오르드와 오로라를 볼 수 있는 국가'], ['인도', '타지마할과 커리의 나라'], ['뉴질랜드', '대자연의 섬나라']],
   food: [
     ['스테이크', '육즙이 살아있는 최고급 고기 요리'], ['크림파스타', '부드럽고 고소한 크림소스 면요리'], ['마라탕', '얼얼하고 매콤한 중독적인 국물 요리'], ['떡볶이', '매콤달콤 국민 간식'], ['초밥', '신선한 회와 밥의 조화'], ['치킨', '바삭바삭 맛있는 국민 야식'], ['햄버거', '두툼한 패티와 빵의 패스트푸드 왕'], ['김치볶음밥', '잘 익은 김치로 만든 밥요리'], ['팬케이크', '달콤한 메이플 시럽을 얹은 디저트'], ['랍스터', '고급스러운 바다의 집게발 진미'], ['짜장면', '까만 춘장소스에 비벼먹는 면요리'], ['피자', '치즈와 토핑이 듬뿍 올라간 음식'], ['삼겹살', '노릇노릇 구워먹는 한국인의 소울푸드'], ['냉면', '시원한 육수에 쫄깃한 면발'], ['타코야키', '동글동글한 일본 길거리 간식'], ['샌드위치', '채소와 재료가 듬뿍 든 식사'], ['카레라이스', '향신료 소스와 밥을 먹는 요리'], ['제육볶음', '매콤하게 양념한 돼지고기 요리'], ['설렁탕', '뽀얗고 진한 사골 국물 요리'], ['빙수', '얼음 위에 달콤한 토핑이 가득한 디저트']],
+  fruit: [
+    ['사과', '아삭하고 달콤한 대표 과일'], ['바나나', '노랗고 부드러운 열대 과일'], ['딸기', '빨갛고 새콤달콤한 봄 과일'], ['포도', '알알이 맺혀 달콤한 과일'], ['수박', '여름에 시원하게 먹는 큰 과일'], ['복숭아', '보드랍고 향긋한 여름 과일'], ['오렌지', '상큼한 향과 비타민 C가 풍부한 과일'], ['파인애플', '껍질은 거칠지만 속은 달콤한 열대 과일'], ['망고', '진하고 달콤한 열대 과일의 왕'], ['체리', '작고 예쁜 빨간색 과일'], ['키위', '초록 속살과 씨앗이 특징인 과일'], ['레몬', '새콤한 맛과 노란색이 특징인 과일'], ['감', '가을에 익어 달콤해지는 과일'], ['자두', '보랏빛 껍질의 새콤달콤한 과일'], ['석류', '작은 보석 같은 알맹이가 가득한 과일'], ['멜론', '향긋하고 부드러운 과육의 과일'], ['블루베리', '작고 진한 보랏빛 열매'], ['귤', '겨울에 즐겨 먹는 상큼한 과일'], ['무화과', '독특한 식감과 은은한 단맛의 과일'], ['코코넛', '단단한 껍질 속에 물과 과육이 있는 열대 과일'],
+  ],
   animal: [
     ['사자', '밀림의 왕이자 멋진 갈기를 가진 맹수'], ['코끼리', '커다란 귀와 긴 코를 가진 동물'], ['기린', '목이 아주 긴 동물'], ['호랑이', '주황색 줄무늬의 용맹한 맹수'], ['원숭이', '나무를 잘 타는 동물'], ['팬더', '대나무를 좋아하는 곰'], ['펭귄', '남극에 사는 헤엄 잘 치는 새'], ['돌고래', '똑똑한 바다 동물'], ['토끼', '긴 귀로 깡충깡충 뛰는 동물'], ['다람쥐', '도토리를 모으는 작은 동물'], ['표범', '점박이 무늬의 빠른 맹수'], ['하마', '물속을 좋아하는 둥근 동물'], ['캥거루', '배에 주머니가 있는 호주 동물'], ['북극곰', '얼음 나라에 사는 하얀 곰'], ['얼룩말', '검은색과 흰색 줄무늬 동물'], ['여우', '뾰족한 주둥이와 꼬리가 매력적인 동물'], ['수달', '물가에서 조개를 깨먹는 동물'], ['부엉이', '밤에 활동하는 지혜로운 새'], ['치타', '가장 빠르게 달리는 맹수'], ['알파카', '보들보들한 털을 가진 동물'],
   ],
@@ -86,7 +89,7 @@ export default function Page() {
 }
 
 function Home({ points, difficulty, setDifficulty, onShop, startGame, resetAll }: { points: number; difficulty: Difficulty; setDifficulty: (d: Difficulty) => void; onShop: () => void; startGame: (m: Mode, l: number) => void; resetAll: () => void }) {
-  const groups: [Mode, string, string, string][] = [['country', '✈️', '세계 나라 모험', 'indigo'], ['food', '🍲', '미식가 모험', 'orange'], ['animal', '🦁', '동물 왕국 모험', 'emerald']]
+  const groups: [Mode, string, string, string][] = [['country', '✈️', '세계 나라 모험', 'indigo'], ['food', '🍲', '미식가 모험', 'orange'], ['animal', '🦁', '동물 왕국 모험', 'emerald'], ['fruit', '🍎', '알록달록 과일 모험', 'rose']]
   return <section className="animate-pop rounded-[28px] border-4 border-indigo-300 bg-white/95 p-5 text-center shadow-2xl backdrop-blur-md"><div className="mb-3 flex items-center justify-between"><span className="rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">🪙 총 포인트: {points}P</span><button onClick={onShop} className="min-h-11 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 text-xs font-bold text-white shadow">🛍️ 상점</button></div><div className="mb-1 text-4xl">🌍✨</div><h1 className="text-xl font-bold text-indigo-600">단어 찾기 대모험</h1><p className="mb-3 text-[11px] text-gray-600">6×7 글자판에서 포인트를 모으며 단어를 완성하세요!</p><div className="mb-3 flex gap-2 rounded-xl bg-gray-100 p-1"><button onClick={() => setDifficulty('normal')} className={`min-h-11 flex-1 rounded-lg text-xs font-bold ${difficulty === 'normal' ? 'bg-indigo-600 text-white' : 'text-gray-600'}`}>🌟 일반 모드 (+30P)</button><button onClick={() => setDifficulty('hard')} className={`min-h-11 flex-1 rounded-lg text-xs font-bold ${difficulty === 'hard' ? 'bg-rose-600 text-white' : 'text-gray-600'}`}>🔥 하드 모드 (+50P)</button></div><div className="flex flex-col gap-2.5">{groups.map(([id, emoji, title, color]) => <div key={id} className={`rounded-2xl border border-${color}-200 bg-${color}-50/70 p-2.5`}><div className={`mb-1.5 text-xs font-bold text-${color}-700`}>{emoji} {title}</div><div className="grid grid-cols-3 gap-1.5">{[5, 10, 20].map((count, index) => <button key={count} onClick={() => startGame(id, count)} className="min-h-11 rounded-xl bg-gradient-to-r from-indigo-400 to-blue-500 px-1 text-xs font-bold text-white shadow">{count}라운드</button>)}</div></div>)}</div><button onClick={resetAll} className="mt-4 min-h-11 w-full rounded-xl border border-rose-200 bg-rose-50 text-xs font-bold text-rose-600">⚠️ 게임 데이터 및 상점 전체 리셋</button></section>
 }
 
