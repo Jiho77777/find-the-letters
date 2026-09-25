@@ -7,7 +7,7 @@ type Difficulty = 'normal' | 'hard'
 type Theme = 'default' | 'sunset' | 'galaxy' | 'forest' | 'sakura' | 'royal' | 'aqua'
 type Round = { name: string; hint: string }
 
-const rounds: Record<Mode, Round[]> = {
+const rawRounds = {
   country: [
     ['대한민국', '아시아에 위치하며 K-컬처의 중심인 나라'], ['미국', '자유의 여신상과 뉴욕이 있는 북아메리카 대국'], ['프랑스', '에펠탑과 루브르 박물관이 있는 예술의 나라'], ['일본', '스시와 온천, 벚꽃으로 유명한 이웃 나라'], ['영국', '빅벤과 타워브리지가 있는 신사의 나라'], ['이탈리아', '장화 모양 지형과 피자, 파스타의 고향'], ['캐나다', '메이플 시럽과 넓은 자연경관을 가진 북쪽 나라'], ['호주', '캥거루와 코알라가 사는 나라'], ['독일', '소시지와 맥주, 자동차 산업으로 유명한 국가'], ['스위스', '알프스 산맥과 아름다운 호수가 있는 국가'], ['브라질', '축구와 거대한 예수상이 있는 남미 국가'], ['스페인', '열정의 플라멩코와 투우의 나라'], ['이집트', '피라미드와 스핑크스가 있는 고대 문명의 나라'], ['베트남', '쌀국수와 하롱베이로 유명한 국가'], ['태국', '황금 사원과 길거리 음식이 가득한 나라'], ['멕시코', '타코와 마야 문명의 유적이 있는 국가'], ['그리스', '산토리니와 신화의 고향'], ['노르웨이', '피오르드와 오로라를 볼 수 있는 국가'], ['인도', '타지마할과 커리의 나라'], ['뉴질랜드', '대자연의 섬나라']],
   food: [
@@ -15,7 +15,8 @@ const rounds: Record<Mode, Round[]> = {
   animal: [
     ['사자', '밀림의 왕이자 멋진 갈기를 가진 맹수'], ['코끼리', '커다란 귀와 긴 코를 가진 동물'], ['기린', '목이 아주 긴 동물'], ['호랑이', '주황색 줄무늬의 용맹한 맹수'], ['원숭이', '나무를 잘 타는 동물'], ['팬더', '대나무를 좋아하는 곰'], ['펭귄', '남극에 사는 헤엄 잘 치는 새'], ['돌고래', '똑똑한 바다 동물'], ['토끼', '긴 귀로 깡충깡충 뛰는 동물'], ['다람쥐', '도토리를 모으는 작은 동물'], ['표범', '점박이 무늬의 빠른 맹수'], ['하마', '물속을 좋아하는 둥근 동물'], ['캥거루', '배에 주머니가 있는 호주 동물'], ['북극곰', '얼음 나라에 사는 하얀 곰'], ['얼룩말', '검은색과 흰색 줄무늬 동물'], ['여우', '뾰족한 주둥이와 꼬리가 매력적인 동물'], ['수달', '물가에서 조개를 깨먹는 동물'], ['부엉이', '밤에 활동하는 지혜로운 새'], ['치타', '가장 빠르게 달리는 맹수'], ['알파카', '보들보들한 털을 가진 동물'],
   ],
-}.reduce((acc, [key, list]) => ({ ...acc, [key]: list.map(([name, hint]) => ({ name, hint })) }), {} as Record<Mode, Round[]>)
+}
+const rounds = Object.entries(rawRounds).reduce((acc, [key, list]) => ({ ...acc, [key]: list.map(([name, hint]) => ({ name, hint })) }), {} as Record<Mode, Round[]>)
 
 const themes: { id: Theme; name: string; emoji: string; price: number; description: string; bg: string }[] = [
   { id: 'default', name: '기본 깔끔한 배경', emoji: '◻️', price: 0, description: '그라데이션이 없는 기본 화면', bg: 'bg-gray-100' },
@@ -60,13 +61,13 @@ export default function Page() {
   useEffect(() => { if (screen !== 'game' || modal) return; const timer = window.setInterval(() => setTime((value) => value - 1), 1000); return () => window.clearInterval(timer) }, [screen, modal, roundIndex])
   useEffect(() => { if (time <= 0 && screen === 'game' && !modal) { setPoints((value) => Math.max(0, value - 10)); setModal('timeout') } }, [time, screen, modal])
 
-  const loadRound = (data: Round[]) => {
-    const next = [...data].sort(() => Math.random() - 0.5).slice(0, limit)
+  const loadRound = (data: Round[], roundLimit = limit) => {
+    const next = [...data].sort(() => Math.random() - 0.5).slice(0, roundLimit)
     setGameRounds(next); setRoundIndex(0); setProgress(0); setClicked([]); setTime(20); setScreen('game'); setModal(null)
     setLetters(buildLetters(next[0].name))
   }
   const buildLetters = (target: string) => [...target.split(''), ...Array.from({ length: 42 - target.length }, () => extras[Math.floor(Math.random() * extras.length)])].sort(() => Math.random() - 0.5)
-  const startGame = (nextMode: Mode, nextLimit: number) => { setMode(nextMode); setLimit(nextLimit); loadRound(rounds[nextMode]) }
+  const startGame = (nextMode: Mode, nextLimit: number) => { setMode(nextMode); setLimit(nextLimit); loadRound(rounds[nextMode], nextLimit) }
   const nextRound = () => { const nextIndex = roundIndex + 1; if (nextIndex >= gameRounds.length) { const bonus = limit === 20 ? 150 : limit === 10 ? 90 : 50; setPoints((value) => value + bonus); setModal('victory'); return }; setRoundIndex(nextIndex); setProgress(0); setClicked([]); setTime(20); setLetters(buildLetters(gameRounds[nextIndex].name)); setModal(null) }
   const clickLetter = (letter: string, index: number) => { if (clicked.includes(index) || modal) return; if (letter === word[progress]) { const next = progress + 1; setProgress(next); setClicked((value) => [...value, index]); if (next === word.length) { setPoints((value) => value + reward); setModal('round') } } }
   const buyTheme = (item: typeof themes[number]) => { if (unlocked.includes(item.id)) { setTheme(item.id); return }; if (points < item.price) return; const next = [...unlocked, item.id]; setPoints((value) => value - item.price); setUnlocked(next); setTheme(item.id); localStorage.setItem('wordgame_unlocked', JSON.stringify(next)); localStorage.setItem('wordgame_theme', item.id) }
