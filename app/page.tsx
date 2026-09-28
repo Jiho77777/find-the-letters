@@ -33,7 +33,7 @@ const themes: { id: Theme; name: string; emoji: string; price: number; descripti
   { id: 'sakura', name: '벚꽃 블로섬', emoji: '🌸', price: 200, description: '화사한 봄날 핑크빛', bg: 'bg-gradient-to-tr from-pink-200 via-rose-200 to-purple-300' },
   { id: 'royal', name: '골든 로열', emoji: '👑', price: 250, description: '고급스러운 황금빛', bg: 'bg-gradient-to-tr from-amber-300 via-yellow-200 to-amber-700' },
   { id: 'aqua', name: '오로라 아쿠아', emoji: '⚡', price: 300, description: '시원한 청량감의 오로라', bg: 'bg-gradient-to-tr from-cyan-200 via-teal-200 to-blue-500' },
-  { id: 'coral', name: '코랄 피치', emoji: '🪸', price: 180, description: '산뜻한 산호빛과 복숭아빛', bg: 'bg-gradient-to-tr from-orange-200 via-rose-300 to-pink-400' },
+  { id: 'coral', name: '코랄 피치', emoji: '🪸', price: 180, description: '산뜻한 산호빛�� 복숭아빛', bg: 'bg-gradient-to-tr from-orange-200 via-rose-300 to-pink-400' },
   { id: 'lavender', name: '라벤더 드림', emoji: '💜', price: 220, description: '차분하고 몽환적인 보랏빛', bg: 'bg-gradient-to-tr from-violet-200 via-purple-300 to-fuchsia-400' },
   { id: 'mint', name: '민트 소다', emoji: '🫧', price: 240, description: '상쾌하고 가벼운 민트빛', bg: 'bg-gradient-to-tr from-emerald-100 via-cyan-200 to-sky-400' },
   { id: 'ocean', name: '딥 오션', emoji: '🌊', price: 350, description: '깊고 시원한 바닷빛', bg: 'bg-gradient-to-tr from-blue-700 via-cyan-700 to-slate-900' },

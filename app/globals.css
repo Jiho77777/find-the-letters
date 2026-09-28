@@ -181,6 +181,7 @@
   .shop.shop-backgrounds .shop-panel-upgrades,
   .shop.shop-upgrades .shop-panel-effects,
   .shop.shop-upgrades .shop-panel-backgrounds { display: none !important; }
+.shop.shop-effects .shop-panel-effects ~ div { display: none !important; }
   .shop.shop-backgrounds .shop-panel-backgrounds,
   .shop.shop-upgrades .shop-panel-upgrades { display: block !important; }
 
