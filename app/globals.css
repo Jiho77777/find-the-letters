@@ -173,11 +173,16 @@
   .shop-panel-effects .grid { display: flex; flex-direction: column; gap: .5rem; }
   .shop-panel-effects .grid > button { width: 100%; }
   .shop-panel-backgrounds,
-  .shop-panel-upgrades { display: none; }
-  .shop-backgrounds .shop-panel-effects,
-  .shop-upgrades .shop-panel-effects { display: none; }
-  .shop-backgrounds .shop-panel-backgrounds,
-  .shop-upgrades .shop-panel-upgrades { display: block; }
+  .shop-panel-upgrades { display: none !important; }
+  .shop.shop-effects .shop-panel-effects { display: block !important; }
+  .shop.shop-effects .shop-panel-backgrounds,
+  .shop.shop-effects .shop-panel-upgrades,
+  .shop.shop-backgrounds .shop-panel-effects,
+  .shop.shop-backgrounds .shop-panel-upgrades,
+  .shop.shop-upgrades .shop-panel-effects,
+  .shop.shop-upgrades .shop-panel-backgrounds { display: none !important; }
+  .shop.shop-backgrounds .shop-panel-backgrounds,
+  .shop.shop-upgrades .shop-panel-upgrades { display: block !important; }
 
 .answer-effect-confetti { color: #ec4899; }
 .answer-effect-hearts { color: #ef4444; }
