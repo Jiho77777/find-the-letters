@@ -170,8 +170,15 @@
 .answer-effect-burst { color: #f97316; letter-spacing: .4rem; }
 .answer-effect-rainbow { color: #8b5cf6; letter-spacing: .3rem; }
 .answer-effect-neon { color: #06b6d4; filter: drop-shadow(0 0 8px #22d3ee); }
-.shop-panel-effects .grid { display: flex; flex-direction: column; gap: .5rem; }
-.shop-panel-effects .grid > button { width: 100%; }
+  .shop-panel-effects .grid { display: flex; flex-direction: column; gap: .5rem; }
+  .shop-panel-effects .grid > button { width: 100%; }
+  .shop-panel-backgrounds,
+  .shop-panel-upgrades { display: none; }
+  .shop-backgrounds .shop-panel-effects,
+  .shop-upgrades .shop-panel-effects { display: none; }
+  .shop-backgrounds .shop-panel-backgrounds,
+  .shop-upgrades .shop-panel-upgrades { display: block; }
+
 .answer-effect-confetti { color: #ec4899; }
 .answer-effect-hearts { color: #ef4444; }
 .answer-effect-lightning { color: #eab308; }
