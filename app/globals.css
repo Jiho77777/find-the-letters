@@ -153,6 +153,24 @@
   }
 }
 
+@keyframes answerSparkle {
+  0% { opacity: 0; transform: translate(-50%, 12px) scale(.5) rotate(-12deg); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -52px) scale(1.45) rotate(12deg); }
+}
+
+.answer-effect {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0 12px currentColor;
+  animation: answerSparkle .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.answer-effect-sparkle { color: #f59e0b; }
+.answer-effect-burst { color: #f97316; letter-spacing: .4rem; }
+.answer-effect-rainbow { color: #8b5cf6; letter-spacing: .3rem; }
+.answer-effect-neon { color: #06b6d4; filter: drop-shadow(0 0 8px #22d3ee); }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
