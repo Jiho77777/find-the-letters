@@ -171,13 +171,6 @@
 .answer-effect-rainbow { color: #8b5cf6; letter-spacing: .3rem; }
 .answer-effect-neon { color: #06b6d4; filter: drop-shadow(0 0 8px #22d3ee); }
 
-.shop-effects > div > :nth-child(6),
-.shop-effects > div > :nth-child(7),
-.shop-backgrounds > div > :nth-child(5),
-.shop-backgrounds > div > :nth-child(6),
-.shop-upgrades > div > :nth-child(5),
-.shop-upgrades > div > :nth-child(7) { display: none; }
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
