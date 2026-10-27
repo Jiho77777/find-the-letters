@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Geometry Blast — 도형 왕국</title>
+<style>
+:root{--bg:#10152f;--panel:#1d2550;--ink:#f6f7ff;--muted:#b8c2f5;--gold:#ffd65a;--cyan:#61e7f7;--pink:#ff76bd;--green:#7cf2a5}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 20% 0,#343b83 0,transparent 38%),linear-gradient(145deg,#10152f,#181036);padding:18px}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;padding:12px 16px;font-weight:800;transition:transform .12s,filter .12s}button:hover{filter:brightness(1.12);transform:translateY(-2px)}button:focus-visible{outline:3px solid white;outline-offset:3px}
+.wrap{max-width:850px;margin:auto}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.logo{font-size:clamp(24px,5vw,38px);font-weight:1000;letter-spacing:-1px}.logo span{color:var(--cyan)}.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#252e60;border:1px solid #46518b;border-radius:99px;padding:8px 12px;font-weight:800}.panel{background:linear-gradient(160deg,#252d60,#1a2046);border:1px solid #46518b;border-radius:24px;padding:clamp(18px,4vw,30px);margin-top:18px;box-shadow:0 18px 50px #05081d66}.muted{color:var(--muted)}.hero{text-align:center;padding:25px 0 10px}.hero .emoji{font-size:70px;filter:drop-shadow(0 7px 0 #0003)}h1{font-size:clamp(27px,5vw,42px);margin:8px 0}h2{margin:0 0 12px}.primary{background:linear-gradient(100deg,#66e8f6,#8b9cff);color:#101532}.secondary{background:#343d75;color:white;border:1px solid #6571b3}.gold{background:linear-gradient(100deg,#ffe57a,#ffad4f);color:#33200a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}.answer{background:#303a72;color:white;border:2px solid #4b5797;min-height:60px;font-size:17px}.answer.correct{background:#1d805d;border-color:#7cf2a5}.answer.wrong{background:#8c315f;border-color:#ff76bd}.bar{height:10px;background:#0f1430;border-radius:99px;overflow:hidden;margin:10px 0}.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),#a4ffca);transition:width .3s}.arena{min-height:170px;display:grid;place-items:center;text-align:center;background:#111837;border-radius:20px;margin:18px 0;padding:16px;position:relative;overflow:hidden}.shape{font-size:90px;line-height:1.15;filter:drop-shadow(0 8px 10px #0005)}.shape svg{width:145px;height:125px}.question{font-size:clamp(19px,4vw,25px);font-weight:900;text-align:center}.feedback{text-align:center;font-weight:900;min-height:28px;margin-top:12px}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}.small{font-size:13px}.hidden{display:none!important}.shopitem{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#141b3c;border-radius:14px;padding:12px;margin:9px 0}.shopitem button{background:var(--gold);color:#33200a}.toast{animation:pop .25s ease}@keyframes pop{from{transform:scale(.8);opacity:.3}to{transform:scale(1);opacity:1}}@media(max-width:480px){body{padding:10px}.grid{gap:8px}.answer{padding:10px;font-size:15px}.stats{gap:5px}.pill{font-size:13px;padding:7px 9px}}
+</style></head>
+<body><main class="wrap">
+<header class="top"><div class="logo">🔷 GEOMETRY <span>BLAST</span></div><div class="stats"><div class="pill">🪙 <b id="coins">0</b></div><div class="pill">⭐ LV <b id="level">1</b></div><div class="pill">🔥 <b id="streak">0</b> 콤보</div></div></header>
+<section id="home" class="panel"><div class="hero"><div class="emoji">🏰🔺🟣</div><h1>도형 왕국을 구하라!</h1><p class="muted">수학 실력으로 몬스터를 물리치고 도형 마스터가 되자!</p><p>🎯 10문제마다 보스 출현 · 정답 코인 · 연속 정답 보너스</p><div class="actions"><button class="primary" onclick="startGame()">⚔️ 모험 시작!</button><button class="secondary" onclick="openShop()">🛍️ 코인 상점</button></div></div><div class="grid"><div class="pill">📐 도형 이름과 특징</div><div class="pill">📏 둘레와 넓이</div><div class="pill">🧠 각도와 대칭</div><div class="pill">👑 보스 챌린지</div></div><p class="muted small" style="text-align:center;margin-top:18px">초등 4학년 수준 · 틀려도 다시 도전할 수 있어!</p></section>
+<section id="game" class="panel hidden"><div class="top"><b id="stage">STAGE 1</b><span id="qnum" class="muted">문제 1 / 10</span></div><div class="bar"><div id="progress"></div></div><div class="arena"><div id="art" class="shape">🔺</div></div><div id="question" class="question"></div><div id="answers" class="grid"></div><div id="feedback" class="feedback"></div><div class="actions"><button id="next" class="primary hidden" onclick="nextQuestion()">다음 문제 ➜</button><button class="secondary" onclick="openShop()">🛍️ 상점</button></div></section>
+<section id="result" class="panel hidden"><div class="hero"><div id="resultEmoji" class="emoji">🏆</div><h1 id="resultTitle">스테이지 클리어!</h1><p id="resultText"></p><div class="actions"><button class="primary" onclick="startGame()">🔁 다음 스테이지</button><button class="secondary" onclick="goHome()">🏠 홈</button><button class="gold" onclick="openShop()">🛍️ 보상 사용</button></div></div></section>
+<section id="shop" class="panel hidden"><h2>🛍️ 코인 상점</h2><p class="muted">모험에서 모은 코인으로 특별 아이템을 구매해 봐!</p><div id="shopCoins" class="pill">🪙 0 코인</div><div class="shopitem"><div>🛡️ <b>실수 방패</b><div class="muted small">다음 문제에서 힌트 보기 (장식 아이템)</div></div><button onclick="buy(15,'실수 방패')">15 🪙</button></div><div class="shopitem"><div>⚡ <b>콤보 부스터</b><div class="muted small">다음 정답 보상 2배</div></div><button onclick="buy(20,'콤보 부스터')">20 🪙</button></div><div class="shopitem"><div>👑 <b>도형 왕관</b><div class="muted small">마스터 칭호 획득!</div></div><button onclick="buy(35,'도형 왕관')">35 🪙</button></div><p id="shopMsg" class="feedback"></p><div class="actions"><button class="primary" onclick="closeShop()">돌아가기</button></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let coins=0,level=1,streak=0,questionIndex=0,score=0,roundCoins=0,current=null,locked=false,fromShop='home',booster=false,items=[];
+const bank=[
+{q:'세 변의 길이가 모두 같은 삼각형은?',a:['정삼각형','직각삼각형','사다리꼴','오각형'],c:0,art:'🔺',why:'정삼각형은 세 변의 길이가 모두 같아!'},
+{q:'직각은 몇 도일까?',a:['45°','90°','120°','180°'],c:1,art:'📐',why:'직각은 정확히 90°야.'},
+{q:'변이 4개이고 마주 보는 변이 각각 평행한 도형은?',a:['삼각형','원','평행사변형','오각형'],c:2,art:'▱',why:'평행사변형은 마주 보는 두 쌍의 변이 평행해.'},
+{q:'한 변이 5cm인 정사각형의 둘레는?',a:['10cm','15cm','20cm','25cm'],c:2,art:'🟦',why:'둘레는 5 × 4 = 20cm!'},
+{q:'가로 6cm, 세로 3cm인 직사각형의 넓이는?',a:['9㎠','18㎠','12㎠','24㎠'],c:1,art:'🟪',why:'넓이는 가로 × 세로 = 6 × 3 = 18㎠.'},
+{q:'대칭축이 4개인 도형은?',a:['일반 삼각형','정사각형','평행사변형','직각삼각형'],c:1,art:'🟨',why:'정사각형에는 대칭축이 4개 있어.'},
+{q:'변이 5개인 다각형의 이름은?',a:['육각형','사각형','오각형','팔각형'],c:2,art:'⬟',why:'오각형은 변과 꼭짓점이 5개야.'},
+{q:'둔각은 어떤 각일까?',a:['90°보다 작은 각','정확히 90°','90°보다 크고 180°보다 작은 각','정확히 180°'],c:2,art:'📐',why:'둔각은 직각보다 크고 평각보다 작아.'},
+{q:'삼각형의 세 각을 모두 더하면?',a:['90°','180°','270°','360°'],c:1,art:'🔺',why:'삼각형의 내각의 합은 180°야.'},
+{q:'원에 대한 설명으로 맞는 것은?',a:['꼭짓점이 4개다','변이 3개다','모든 점이 중심에서 같은 거리에 있다','직각이 2개다'],c:2,art:'🟣',why:'원의 둘레 위 모든 점은 중심에서 같은 거리에 있어.'},
+{q:'한 변이 7cm인 정사각형의 둘레는?',a:['14cm','21cm','28cm','49cm'],c:2,art:'🟩',why:'7 × 4 = 28cm!'},
+{q:'직사각형의 특징으로 맞는 것은?',a:['네 변이 모두 항상 같다','네 각이 모두 직각이다','꼭짓점이 3개다','곡선으로만 이루어졌다'],c:1,art:'🟦',why:'직사각형은 네 각이 모두 직각이야.'},
+{q:'정육면체의 면은 모두 몇 개일까?',a:['4개','6개','8개','12개'],c:1,art:'🎲',why:'정육면체는 정사각형 모양의 면 6개로 이루어져 있어.'},
+{q:'각도가 35°인 각은?',a:['직각','둔각','예각','평각'],c:2,art:'📐',why:'예각은 0°보다 크고 90°보다 작은 각이야.'},
+{q:'가로 8cm, 세로 4cm인 직사각형의 둘레는?',a:['12cm','24cm','32cm','16cm'],c:1,art:'🟪',why:'(8 + 4) × 2 = 24cm!'},
+{q:'사각형의 네 각을 모두 더하면?',a:['180°','270°','360°','90°'],c:2,art:'🔶',why:'사각형의 내각의 합은 360°야.'}
+];
+function updateStats(){$('coins').textContent=coins;$('level').textContent=level;$('streak').textContent=streak}
+function show(id){['home','game','result','shop'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
+function goHome(){show('home')}
+function startGame(){questionIndex=0;score=0;roundCoins=0;streak=0;locked=false;show('game');loadQuestion()}
+function loadQuestion(){
+ locked=false;$('next').classList.add('hidden');$('feedback').textContent='';
+ const boss=(questionIndex===9);$('stage').textContent=boss?'👑 BOSS ROUND':'⚔️ STAGE '+level;
+ $('qnum').textContent='문제 '+(questionIndex+1)+' / 10';$('progress').style.width=(questionIndex*10)+'%';
+ let pool=bank.filter((_,i)=>!items.includes('used'+i));if(pool.length<1){items=items.filter(x=>!x.startsWith('used'));pool=bank.slice()}
+ const idx=Math.floor(Math.random()*pool.length);current=pool[idx];items.push('used'+bank.indexOf(current));
+ $('art').textContent=boss?'👾':current.art;$('art').classList.remove('toast');void $('art').offsetWidth;$('art').classList.add('toast');
+ $('question').textContent=(boss?'보스의 마지막 수수께끼! ':'')+current.q;
+ const order=current.a.map((v,i)=>({v,correct:i===current.c})).sort(()=>Math.random()-.5);
+ $('answers').innerHTML='';order.forEach(item=>{const b=document.createElement('button');b.className='answer';b.textContent=item.v;b.onclick=()=>answer(b,item.correct);$('answers').appendChild(b)});
+}
+function answer(btn,correct){if(locked)return;locked=true;[...$('answers').children].forEach(b=>b.disabled=true);
+ if(correct){streak++;score+=100+Math.min(streak,5)*20;let reward=5+Math.min(streak,5);if(booster){reward*=2;booster=false}coins+=reward;roundCoins+=reward;btn.classList.add('correct');$('feedback').textContent='✨ 정답! +'+reward+' 코인'+(streak>=3?' · 🔥 '+streak+' 콤보!':'');$('feedback').style.color='#7cf2a5'}
+ else{streak=0;btn.classList.add('wrong');[...$('answers').children].forEach(b=>{if(b.textContent===current.a[current.c])b.classList.add('correct')});$('feedback').textContent='💡 '+current.why;$('feedback').style.color='#ffd65a'}
+ updateStats();$('next').classList.remove('hidden');$('progress').style.width=((questionIndex+1)*10)+'%';
+}
+function nextQuestion(){questionIndex++;if(questionIndex>=10){level++;updateStats();show('result');$('resultEmoji').textContent=score>=1300?'👑':'🏆';$('resultTitle').textContent='스테이지 클리어!';$('resultText').textContent='점수 '+score+'점 · 코인 +'+roundCoins+'개 획득! '+(score>=1300?'완벽한 도형 마스터 실력!':'좋았어! 다음 스테이지에서 더 높은 점수에 도전해 봐.');items=items.filter(x=>!x.startsWith('used'));return}loadQuestion()}
+function openShop(){fromShop=$('game').classList.contains('hidden')?($('result').classList.contains('hidden')?'home':'result'):'game';$('shopCoins').textContent='🪙 '+coins+' 코인';$('shopMsg').textContent='';show('shop')}
+function closeShop(){show(fromShop)}
+function buy(cost,name){if(coins<cost){$('shopMsg').textContent='코인이 부족해! 문제를 더 풀어 보자.';return}coins-=cost;if(name==='콤보 부스터')booster=true;$('shopCoins').textContent='🪙 '+coins+' 코인';$('shopMsg').textContent='🎉 '+name+' 구매 완료!';updateStats()}
+updateStats();
+</script></body></html>
